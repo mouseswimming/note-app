@@ -1,4 +1,4 @@
-import { NoteInfo } from '@shared/models'
+import { NoteContent, NoteInfo } from '@shared/models'
 import { atom } from 'jotai'
 import { unwrap } from 'jotai/utils'
 
@@ -12,11 +12,11 @@ const loadNotes = async () => {
 // notesAtomAsync is aync, and we need to use unwrapper function from jotai to assign it to sync notesAtom
 const notesAtomAsync = atom<NoteInfo[] | Promise<NoteInfo[]>>(loadNotes())
 
-export const notesAtom = unwrap(notesAtomAsync, (prev) => prev || [])
+export const notesAtom = unwrap(notesAtomAsync, (prev) => prev ?? [])
 
 export const selectedNoteIndexAtom = atom<number | null>(null)
 
-export const selectedNoteAtom = atom((get) => {
+const selectedNoteAtomAsync = atom(async (get) => {
   const notes = get(notesAtom)
   const selectedNoteIndex = get(selectedNoteIndexAtom)
 
@@ -25,34 +25,75 @@ export const selectedNoteAtom = atom((get) => {
 
   const selectedNote = notes[selectedNoteIndex]
 
-  return { ...selectedNote, content: `Hello from Note${selectedNoteIndex}` }
+  const noteContent = await window.context.readNote(selectedNote.filename)
+
+  return { ...selectedNote, content: noteContent }
 })
 
-export const createEmptyNoteAtom = atom(null, (get, set) => {
+/* 
+  Since the selectedNoteAtom can be null, we will provide a default empty note
+*/
+export const selectedNoteAtom = unwrap(
+  selectedNoteAtomAsync,
+  (prev) => prev ?? { filename: '', content: '', lastEditTime: Date.now() }
+)
+
+export const createEmptyNoteAtom = atom(null, async (get, set) => {
   const notes = get(notesAtom)
 
-  // if (!notes) return
+  const filename = await window.context.createNote()
+
+  if (!filename) return
 
   const newNote: NoteInfo = {
-    title: `Note ${notes.length + 1}`,
+    filename,
     lastEditTime: Date.now()
   }
-
-  set(notesAtom, [newNote, ...notes])
+  /* 
+    the reason we do here is to handle the overwriting case.
+    if user decide to overwite the prevous note, we need to filter the old one out
+    ...notes.filter((note) => note.filename !== filename)
+  */
+  set(notesAtom, [newNote, ...notes.filter((note) => note.filename !== filename)])
   set(selectedNoteIndexAtom, 0)
 })
 
-export const deleteNoteAtom = atom(null, (get, set) => {
+export const deleteNoteAtom = atom(null, async (get, set) => {
   const notes = get(notesAtom)
-  const selectedNoteIndex = get(selectedNoteIndexAtom)
+  const selectedNote = get(selectedNoteAtom)
 
-  // if (selectedNoteIndex === null || !notes) return
-  if (selectedNoteIndex === null) return
+  if (selectedNote === null) return
+  const response = await window.context.deleteNote(selectedNote.filename)
+
+  if (!response) return
 
   set(
     notesAtom,
-    notes.filter((_, i) => i !== selectedNoteIndex)
+    notes.filter((note) => note.filename !== selectedNote.filename)
   )
 
   set(selectedNoteIndexAtom, null)
+})
+
+export const saveNoteAtom = atom(null, async (get, set, newContent: NoteContent) => {
+  const notes = get(notesAtom)
+  const selectedNote = get(selectedNoteAtom)
+
+  // if (!selectedNote || !notes) return
+  if (!selectedNote) return
+
+  // save note content
+  await window.context.writeNote(selectedNote.filename, newContent)
+
+  // update note last edit time
+  set(
+    notesAtom,
+    notes.map((note) => {
+      if (note.filename === selectedNote.filename) {
+        return { ...note, lastEditTime: Date.now() }
+      }
+
+      return note
+    })
+  )
 })

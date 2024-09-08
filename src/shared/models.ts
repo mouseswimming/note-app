@@ -1,5 +1,5 @@
 export type NoteInfo = {
-  title: string
+  filename: string
   lastEditTime: number
 }
 

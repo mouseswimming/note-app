@@ -1,15 +1,16 @@
 import { electronApp, is, optimizer } from '@electron-toolkit/utils'
-import { GetNotes } from '@shared/types'
-import { BrowserWindow, app, ipcMain, shell } from 'electron'
+import { CreateNote, DeleteNote, GetNotes, ReadNote, WriteNote } from '@shared/types'
+import { BrowserWindow, app, ipcMain, screen, shell } from 'electron'
 import { join } from 'path'
 import icon from '../../resources/icon.png?asset'
-import { getNotes } from './lib'
+import { createNote, deleteNote, getNotes, readNote, writeNote } from './lib'
 
 function createWindow(): void {
+  const { width, height } = screen.getPrimaryDisplay().workAreaSize
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 900,
-    height: 670,
+    width: Math.floor(width * 0.8),
+    height: Math.floor(height * 0.8),
     show: false,
     autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
@@ -21,7 +22,7 @@ function createWindow(): void {
     // to make the window dragabble, we need to create our own component
     // draggableTopBar
     titleBarStyle: 'hidden',
-    trafficLightPosition: { x: 15, y: 10 },
+    trafficLightPosition: { x: 15, y: 15 },
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       // below two options are recmmended for security
@@ -29,6 +30,8 @@ function createWindow(): void {
       contextIsolation: true
     }
   })
+
+  // mainWindow.maximize()
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
@@ -67,6 +70,10 @@ app.whenReady().then(() => {
     by doing Parameters<GetNotes>, we put safe guard and whenever we change GetNotes type, the function getNotes will be notified with the new type
   */
   ipcMain.handle('getNotes', (_, ...args: Parameters<GetNotes>) => getNotes(...args))
+  ipcMain.handle('readNote', (_, ...args: Parameters<ReadNote>) => readNote(...args))
+  ipcMain.handle('writeNote', (_, ...args: Parameters<WriteNote>) => writeNote(...args))
+  ipcMain.handle('createNote', (_, ...args: Parameters<CreateNote>) => createNote(...args))
+  ipcMain.handle('deleteNote', (_, ...args: Parameters<DeleteNote>) => deleteNote(...args))
 
   createWindow()
 

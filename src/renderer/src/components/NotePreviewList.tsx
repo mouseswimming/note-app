@@ -10,7 +10,6 @@ export type NotePreviewListProps = ComponentProps<'ul'> & {
 
 export const NotePreviewList = ({ onSelect, className, ...props }: NotePreviewListProps) => {
   const { notes, selectedNoteIndex, handleNoteSelect } = useNoteList({ onSelect })
-  // if (!notes) return null
 
   if (isEmpty(notes)) {
     return (
@@ -24,7 +23,7 @@ export const NotePreviewList = ({ onSelect, className, ...props }: NotePreviewLi
     <ul className={className} {...props}>
       {notes.map((note, index) => (
         <NotePreview
-          key={note.title + note.lastEditTime}
+          key={note.filename}
           isActive={index === selectedNoteIndex}
           onClick={() => handleNoteSelect(index)}
           {...note}

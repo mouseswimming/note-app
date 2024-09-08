@@ -6,8 +6,12 @@ import { ActionButton, ActionButtonTypes } from './ActionButton'
 export const DeleteNoteButton = ({ ...props }: ActionButtonTypes) => {
   const deleteNote = useSetAtom(deleteNoteAtom)
 
+  const handleDelete = async () => {
+    await deleteNote()
+  }
+
   return (
-    <ActionButton {...props} onClick={deleteNote}>
+    <ActionButton {...props} onClick={handleDelete}>
       <LuTrash2 className="w-4 h-4" />
     </ActionButton>
   )

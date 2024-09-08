@@ -7,10 +7,7 @@ import { twMerge } from 'tailwind-merge'
 */
 export const Sidebar = ({ className, children, ...props }: ComponentProps<'aside'>) => {
   return (
-    <aside
-      {...props}
-      className={twMerge('w-[250px] mt-10 h-[100vh + 10px] overflow-auto', className)}
-    >
+    <aside {...props} className={twMerge('w-[250px] h-screen overflow-auto', className)}>
       {children}
     </aside>
   )
