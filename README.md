@@ -5,6 +5,11 @@ An Electron application with React and TypeScript.
 Inited with https://www.npmjs.com/package/@quick-start/create-electron
 Inspired by https://github.com/CodeWithGionatha-Labs/NoteMark
 
+Some enhancement are made on top of the original project.
+
+- new layout
+- full markdown toolbar
+
 ## Recommended IDE Setup
 
 - [VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
