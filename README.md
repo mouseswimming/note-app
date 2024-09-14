@@ -11,6 +11,11 @@ Some enhancement are made on top of the original project.
 - full markdown toolbar
 - app will align with the user system's color mode
 
+![image](https://github.com/user-attachments/assets/58696f48-abbf-4f7f-849b-71dbb5cc9248)
+
+![image](https://github.com/user-attachments/assets/cc6477ff-7a8d-42dd-acd5-d2b0e8ee2735)
+
+
 ## Recommended IDE Setup
 
 - [VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
