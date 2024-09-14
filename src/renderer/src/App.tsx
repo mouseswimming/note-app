@@ -23,15 +23,14 @@ const App = () => {
     <>
       <DraggableTopBar />
       <RootLayout>
-        <Sidebar className="bg-slate-100 border-r border-slate-300 grid grid-rows-[auto_1fr]">
-          <div className="app-region-drag flex justify-end items-center pr-2 h-12 border-b border-slate-300">
+        <Sidebar className="text-black dark:text-white border-r border-slate-300 dark:border-slate-700 grid grid-rows-[auto_1fr]">
+          <div className="app-region-drag flex justify-end items-center pr-2 h-12 border-b border-slate-300 dark:border-slate-700">
             <ActionButtonsRow className="flex gap-2" />
           </div>
-          {/* <ActionButtonsRow className="flex justify-end gap-2 items-center pr-2 h-12 border-b border-slate-300" /> */}
-          <NotePreviewList className=" space-y-1 bg-white" onSelect={resetScroll} />
+          <NotePreviewList className="p-2 space-y-1 dark:text-white" onSelect={resetScroll} />
         </Sidebar>
-        <Content className="border-l bg-white border-l-white/20 grid grid-rows-[auto_1fr]">
-          <FloatingNoteTitle className="p-2 h-12 border-b border-slate-300" />
+        <Content className=" dark:text-white  grid grid-rows-[auto_1fr]">
+          <FloatingNoteTitle className="p-2 h-12 border-b border-slate-300 dark:border-slate-700" />
           <div className="h-full overflow-y-auto relative" ref={contentContainerRef}>
             <MarkdownEditor />
           </div>

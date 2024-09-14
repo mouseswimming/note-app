@@ -7,7 +7,7 @@ export const FloatingNoteTitle = ({ className, ...props }: ComponentProps<'div'>
   const selectedNote = useAtomValue(selectedNoteAtom)
 
   return (
-    <div className={twMerge('flex justify-center items-cente bg-slate-100', className)} {...props}>
+    <div className={twMerge('flex justify-center items-center', className)} {...props}>
       <span>{selectedNote?.filename}</span>
     </div>
   )

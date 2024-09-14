@@ -26,7 +26,7 @@ export const MarkdownEditor = () => {
         we can inform the editor to re-render when the selected note change.
       */}
       <MDXEditor
-        className="h-full"
+        className="h-full "
         ref={editorRef}
         key={selectedNote.filename}
         onChange={handleAutoSaving}
@@ -39,7 +39,7 @@ export const MarkdownEditor = () => {
           markdownShortcutPlugin(),
           toolbarPlugin({ toolbarContents: () => <KitchenSinkToolbar /> })
         ]}
-        contentEditableClassName="outline-none h-full max-w-none text-lg px-8 py-5 caret-yellow-500 prose prose-headings:text-black prose-p:text-black prose-p:my-3 prose-p:leading-relaxed prose-headings:my-4 prose-blockquote:my-4 prose-ul:my-2 prose-li:my-0 prose-code:px-1 prose-code:text-red-500 prose-code:before:content-[''] prose-code:after:content-['']"
+        contentEditableClassName="outline-none h-full max-w-none text-lg px-8 py-5 caret-yellow-500 prose prose-p:dark:text-white prose-p:my-3 prose-p:leading-relaxed prose-headings:my-4 prose-blockquote:dark:text-white prose-blockquote:my-4 prose-li:dark:text-white prose-ul:my-2 prose-li:my-0 prose-code:px-1 prose-code:text-red-500 prose-code:before:content-[''] prose-code:after:content-[''] dark:prose-invert"
       />
     </div>
   )

@@ -2,13 +2,14 @@
 
 An Electron application with React and TypeScript.
 
-Inited with https://www.npmjs.com/package/@quick-start/create-electron
-Inspired by https://github.com/CodeWithGionatha-Labs/NoteMark
+Initiated with https://www.npmjs.com/package/@quick-start/create-electron
+Inspired by https://github.com/CodeWithGionatha-Labs/NoteMark (https://www.youtube.com/watch?v=H5d2mN38-vo)
 
 Some enhancement are made on top of the original project.
 
 - new layout
 - full markdown toolbar
+- app will align with the user system's color mode
 
 ## Recommended IDE Setup
 
