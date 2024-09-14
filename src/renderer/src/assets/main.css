@@ -25,7 +25,7 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-slate-600 rounded-md;
+    @apply bg-zinc-500 rounded-md;
   }
 
   ::-webkit-scrollbar-track {

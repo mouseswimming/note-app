@@ -17,7 +17,7 @@ function createWindow(): void {
     center: true,
     title: 'Note Mark',
     frame: false,
-    vibrancy: 'under-window',
+    // vibrancy: 'under-window',
     // when we hide title bar, we can't drag the window natually
     // to make the window dragabble, we need to create our own component
     // draggableTopBar
