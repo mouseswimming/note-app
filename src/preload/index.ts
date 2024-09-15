@@ -9,7 +9,9 @@ if (process.contextIsolated) {
       readNote: (...args: Parameters<ReadNote>) => ipcRenderer.invoke('readNote', ...args),
       writeNote: (...args: Parameters<WriteNote>) => ipcRenderer.invoke('writeNote', ...args),
       createNote: (...args: Parameters<CreateNote>) => ipcRenderer.invoke('createNote', ...args),
-      deleteNote: (...args: Parameters<DeleteNote>) => ipcRenderer.invoke('deleteNote', ...args)
+      deleteNote: (...args: Parameters<DeleteNote>) => ipcRenderer.invoke('deleteNote', ...args),
+      toggle: () => ipcRenderer.invoke('dark-mode:toggle'),
+      system: () => ipcRenderer.invoke('dark-mode:system')
     })
   } catch (error) {
     console.error(error)

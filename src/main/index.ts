@@ -1,6 +1,6 @@
 import { electronApp, is, optimizer } from '@electron-toolkit/utils'
 import { CreateNote, DeleteNote, GetNotes, ReadNote, WriteNote } from '@shared/types'
-import { BrowserWindow, app, ipcMain, screen, shell } from 'electron'
+import { BrowserWindow, app, ipcMain, nativeTheme, screen, shell } from 'electron'
 import { join } from 'path'
 import icon from '../../resources/icon.png?asset'
 import { createNote, deleteNote, getNotes, readNote, writeNote } from './lib'
@@ -17,7 +17,7 @@ function createWindow(): void {
     center: true,
     title: 'Note Mark',
     frame: false,
-    // vibrancy: 'under-window',
+    vibrancy: 'under-window',
     // when we hide title bar, we can't drag the window natually
     // to make the window dragabble, we need to create our own component
     // draggableTopBar
@@ -31,7 +31,24 @@ function createWindow(): void {
     }
   })
 
-  // mainWindow.maximize()
+  /* 
+    Allow user to toggle the theme
+  */
+  ipcMain.handle('dark-mode:toggle', () => {
+    if (nativeTheme.shouldUseDarkColors) {
+      nativeTheme.themeSource = 'light'
+    } else {
+      nativeTheme.themeSource = 'dark'
+    }
+    return nativeTheme.shouldUseDarkColors
+  })
+
+  /* 
+    Use system defautl color theme
+  */
+  ipcMain.handle('dark-mode:system', () => {
+    nativeTheme.themeSource = 'system'
+  })
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()

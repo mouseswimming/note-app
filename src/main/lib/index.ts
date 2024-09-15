@@ -1,23 +1,32 @@
-import { appDirectoryName, fileEncoding, welcomeFilename } from '@shared/constants'
+import { fileEncoding, welcomeFilename } from '@shared/constants'
 import { NoteInfo } from '@shared/models'
 import { CreateNote, DeleteNote, GetNotes, ReadNote, WriteNote } from '@shared/types'
-import { dialog } from 'electron'
+import { app, dialog } from 'electron'
 import { ensureDir, readdir, readFile, remove, stat, writeFile } from 'fs-extra'
 import { isEmpty } from 'lodash'
-import { homedir } from 'os'
 import path from 'path'
 // so vite know it is a static asset file
 import welcomeFile from '../../../resources/welcometNote.md?asset'
 
-export const getRootDir = () => {
-  return `${homedir()}/${appDirectoryName}`
+export const getRootDir = async () => {
+  // Get the system's app data directory
+  const appDataPath = app.getPath('userData') // or 'appData' for more general data
+  const appDirectoryName = 'V-Note-App' // my app's name
+
+  // Create a folder for your app inside the app data directory
+  const rootDir = path.join(appDataPath, appDirectoryName)
+
+  // Ensure the directory exists
+  await ensureDir(rootDir)
+
+  return rootDir
 }
 
 export const getNotes: GetNotes = async () => {
-  const rootDir = getRootDir()
+  const rootDir = await getRootDir()
 
   // we need to make sure the folder exist
-  await ensureDir(rootDir)
+  // await ensureDir(rootDir)
 
   const notesFileNames = await readdir(rootDir, {
     encoding: fileEncoding,
@@ -49,21 +58,19 @@ export const getNoteInfoFromFilename = async (filename: string): Promise<NoteInf
 }
 
 export const readNote: ReadNote = async (filename) => {
-  const rootDir = getRootDir()
+  const rootDir = await getRootDir()
 
   return readFile(`${rootDir}/${filename}.md`, { encoding: fileEncoding })
 }
 
 export const writeNote: WriteNote = async (filename, content) => {
-  const rootDir = getRootDir()
+  const rootDir = await getRootDir()
 
   return writeFile(`${rootDir}/${filename}.md`, content, { encoding: fileEncoding })
 }
 
 export const createNote: CreateNote = async () => {
-  const rootDir = getRootDir()
-
-  await ensureDir(rootDir)
+  const rootDir = await getRootDir()
 
   // use dialouge from electron, allow user to input their filer name
 
@@ -98,7 +105,7 @@ export const createNote: CreateNote = async () => {
 }
 
 export const deleteNote: DeleteNote = async (filename) => {
-  const rootDir = getRootDir()
+  const rootDir = await getRootDir()
 
   const { response } = await dialog.showMessageBox({
     type: 'warning',

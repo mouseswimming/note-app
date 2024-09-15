@@ -9,6 +9,8 @@ declare global {
       writeNote: WriteNote
       createNote: CreateNote
       deleteNote: DeleteNote
+      toggle: () => Promise
+      system: () => Promise
     }
   }
 }
