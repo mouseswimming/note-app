@@ -8,25 +8,23 @@ import path from 'path'
 // so vite know it is a static asset file
 import welcomeFile from '../../../resources/welcometNote.md?asset'
 
-export const getRootDir = async () => {
+export const getRootDir = () => {
   // Get the system's app data directory
-  const appDataPath = app.getPath('userData') // or 'appData' for more general data
+  const appDataPath = app.getPath('appData') // or 'appData' for more general data
   const appDirectoryName = 'V-Note-App' // my app's name
 
   // Create a folder for your app inside the app data directory
   const rootDir = path.join(appDataPath, appDirectoryName)
 
-  // Ensure the directory exists
-  await ensureDir(rootDir)
-
   return rootDir
 }
 
 export const getNotes: GetNotes = async () => {
-  const rootDir = await getRootDir()
+  const rootDir = getRootDir()
+  console.log({ rootDir })
 
   // we need to make sure the folder exist
-  // await ensureDir(rootDir)
+  await ensureDir(rootDir)
 
   const notesFileNames = await readdir(rootDir, {
     encoding: fileEncoding,
@@ -58,19 +56,22 @@ export const getNoteInfoFromFilename = async (filename: string): Promise<NoteInf
 }
 
 export const readNote: ReadNote = async (filename) => {
-  const rootDir = await getRootDir()
+  const rootDir = getRootDir()
+  await ensureDir(rootDir)
 
   return readFile(`${rootDir}/${filename}.md`, { encoding: fileEncoding })
 }
 
 export const writeNote: WriteNote = async (filename, content) => {
-  const rootDir = await getRootDir()
+  const rootDir = getRootDir()
+  await ensureDir(rootDir)
 
   return writeFile(`${rootDir}/${filename}.md`, content, { encoding: fileEncoding })
 }
 
 export const createNote: CreateNote = async () => {
-  const rootDir = await getRootDir()
+  const rootDir = getRootDir()
+  await ensureDir(rootDir)
 
   // use dialouge from electron, allow user to input their filer name
 
